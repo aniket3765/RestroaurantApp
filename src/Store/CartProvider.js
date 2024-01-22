@@ -8,8 +8,24 @@ const defaultCartState = {
 
 const cartReducer =(state, action)=> {
     if(action.type === "ADD_MEAL"){
-    const updatedItems = [...state.item, action.item]
-        const updatedTotalAmount = state.totalAmount + action.item.amount;
+        const updatedTotalAmount = state.totalAmount + action.item.price * action.item.amount;
+        const existingItemIndex = state.item.findIndex((item) => item.id === action.item.id);
+        const exitstingItem = state.item[existingItemIndex];
+        let updatedItems;
+        let updatedItem;
+
+        if(exitstingItem){
+            updatedItem = {
+                ...exitstingItem,
+                amount:exitstingItem.amount + action.item.amount
+            }
+            updatedItems  = [...state.item];
+            updatedItems[existingItemIndex] = updatedItem;
+        }
+        else{
+            updatedItems = [...state.item, action.item]
+        }
+
         return {item:updatedItems, totalAmount:updatedTotalAmount}
     }    
      
@@ -18,7 +34,6 @@ const cartReducer =(state, action)=> {
 const CartProvider = props => {
 
    const[cartState, dispatchCart] =  useReducer(cartReducer, defaultCartState)
-
     const addItemtoCartHandler = item => {
         dispatchCart({type:"ADD_MEAL", item:item})  
     };

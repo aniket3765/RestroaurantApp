@@ -8,7 +8,7 @@ const MealItem = (props) => {
     const addMealToCart = (amount)=> {
         cartCtx.addItem({
             id:props.id,
-            name:props.name,
+            name:props.name, 
             amount:amount,
             price:props.price
         })
